@@ -141,7 +141,18 @@ namespace SearchAndSort
             if (usersKeyInput != -1)
             {
                 // The input was a valid string integer representation and could be parsed.
-                
+                // Get the index of the number (this method returns -1 if not found).
+                int searchNumIndex = binarySearchReturnIndex(usersKeyInput);
+                if (searchNumIndex == -1)
+                {
+                    // Couldn't find the number in the list.
+                    Console.WriteLine("\nUnable to find {0} in [" + String.Join(", ", numbers) + "]\n", usersKeyInput);
+                }
+                else
+                {
+                    // Found the number.
+                    Console.WriteLine("\nFound {0} in [" + String.Join(", ", numbers) + "] at index {1}.\n", usersKeyInput, searchNumIndex);
+                }
             }
             else
             {
@@ -177,8 +188,7 @@ namespace SearchAndSort
             if (alist.Count() > 1)
             {
                 // Get the middle of the list and split into two sublists
-                double mid = alist.Count() / 2;
-                int middleOfList = (int) Math.Floor(mid);
+                int middleOfList = (int) Math.Floor((double) (alist.Count() / 2));
 
                 // Left list, split to the middle
                 List<int> leftList = new List<int>();
@@ -238,6 +248,59 @@ namespace SearchAndSort
                     k += 1;
                 }
             }
+        }
+
+        // Binary Search method that searches for an int in the list.
+        static int binarySearchReturnIndex(int searchNum)
+        {
+            // Set the found index to -1 initially as this sets it as not being found.
+            int notFoundIndex = -1;
+
+            // Get the lower, upper and middle of the list.
+            int lowerBound = 0;
+            int upperBound = numbers.Count() - 1;
+            int middleOfList = (int) Math.Floor((double) (numbers.Count() / 2));
+
+            if (searchNum > numbers[upperBound] || searchNum < numbers[lowerBound])
+            {
+                // The number isn't in the list as it's greater or smaller than the largest or smallest
+                // number in the list.
+                return notFoundIndex;
+            }
+
+            // Loop until we find the number or no match can be found.
+            while (lowerBound <= upperBound)
+            {
+                // Get the middle of the list.
+                middleOfList = (int)Math.Floor((double)((lowerBound + upperBound) / 2));
+
+                if (searchNum > numbers[middleOfList])
+                {
+                    // The middle number is smaller than the search number so reset the left to be the
+                    // middle number index + 1.
+                    lowerBound = middleOfList + 1;
+                }
+                else if (searchNum < numbers[middleOfList])
+                {
+                    // The middle number is greater than the search number so reset the upper to be the
+                    // middle number index - 1.
+                    upperBound = middleOfList - 1;
+                }
+                else if (searchNum == numbers[middleOfList])
+                {
+                    // We've found the number at the index middleOfList so return the index.
+                    return middleOfList;
+                }
+                else
+                {
+                    // None of the above conditions were matched so lets exit.
+                    return notFoundIndex;
+                }
+            }
+
+            // After the loop has completed we are at the middle of the list and we haven't found the number
+            // so it's not in the list.
+            return notFoundIndex;
         }
 
         // Helper class to parse the user's input and return an int if possible.
