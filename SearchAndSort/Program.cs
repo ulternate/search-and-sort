@@ -131,7 +131,7 @@ namespace SearchAndSort
             mergeSort(numbers);
 
             // Get the user's number that they want to find.
-            Console.WriteLine("Please enter the number you want to search for in the list.");
+            Console.WriteLine("Please enter the number you want to search for in the current list [" + String.Join(", ", numbers) + "]");
 
             // Get the user's desired node data.
             Console.Write("\nNumber to find: ");
